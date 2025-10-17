@@ -25,7 +25,7 @@ autenticación basada en tokens.
 private JwtUtils jwtUtils;
 
 // Generar token
-String token = jwtUtils.generateToken("usuario1", List.of("ADMIN"));
+String token = jwtUtils.generateToken("usuario1", roles);
 
 // Validar token
 boolean valido = jwtUtils.validateToken(token);

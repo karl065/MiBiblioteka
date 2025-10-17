@@ -30,7 +30,7 @@ public class Usuarios {
     private String direccion;
 
     @DBRef
-    private Roles rol;
+    private List<Roles> rol; // Referencia a roles asignados al usuario
 
     private boolean activo = true;
 
