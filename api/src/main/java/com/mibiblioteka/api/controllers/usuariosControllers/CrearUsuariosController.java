@@ -3,7 +3,7 @@ package com.mibiblioteka.api.controllers.usuariosControllers;
 import com.mibiblioteka.api.models.Roles;
 import com.mibiblioteka.api.models.Usuarios;
 import com.mibiblioteka.api.services.rolesService.RolesServices;
-import com.mibiblioteka.api.services.usuariosService.UsuariosService;
+import com.mibiblioteka.api.services.usuariosService.CrearUsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -14,30 +14,30 @@ import org.springframework.web.server.ResponseStatusException;
 public class CrearUsuariosController {
 
     @Autowired
-    private UsuariosService usuariosService;
+    private CrearUsuariosService crearUsuariosService;
 
     @Autowired
     private RolesServices rolesServices; // Servicio de roles
 
     @PostMapping
     public Usuarios crear(@RequestBody Usuarios usuario) {
-        // Validar que al menos un rol esté asignado
-        if (usuario.getRol() == null || usuario.getRol().isEmpty()) {
-            throw new IllegalArgumentException("El usuario debe tener al menos un rol asignado.");
-        }
+        try {
+        
+            if (usuario.getRol() == null || usuario.getRol().isEmpty()) {
+                throw new IllegalArgumentException("El usuario debe tener al menos un rol asignado.");
+        
+            }
 
-        // Crear usuario
-        Usuarios nuevoUsuario = usuariosService.crearUsuario(usuario);
+        
+            Usuarios nuevoUsuario = crearUsuariosService.crearUsuariosServices(usuario);
 
-        // Actualizar cada rol para agregar este usuario
-        try { 
             usuario.getRol().forEach(rol -> extracted(nuevoUsuario, rol));
+            return nuevoUsuario;
         } catch (Exception e) { 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "No se pudo asociar el usuario a los roles", e); // { changed code }
+                    "No se pudo asociar el usuario a los roles", e); 
         }
 
-        return nuevoUsuario;
     }
 
     private void extracted(Usuarios nuevoUsuario, Roles rol) {

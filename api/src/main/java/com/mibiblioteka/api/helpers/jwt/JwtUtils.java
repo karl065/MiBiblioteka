@@ -41,10 +41,10 @@ public class JwtUtils {
     }
 
     // Generar token con correo y roles
-    public String generateToken(String subject, List<String> rol) {
+    public String generateToken(String subject, List<String> roles) {
         return Jwts.builder()
                 .setSubject(subject)
-                .claim("rol", rol)
+                .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTimeInMillis))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -63,7 +63,7 @@ public class JwtUtils {
     }
 
     // Obtener username desde token
-    public String getUsernameFromToken(String token) {
+    public String getCorreoFromToken(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token).getBody();
         return claims.getSubject();
