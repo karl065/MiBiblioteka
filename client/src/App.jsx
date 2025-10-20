@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/* eslint-disable react-hooks/exhaustive-deps */
+import './App.css';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { adminReloginAction } from './redux/admin/actions/adminReloginAction';
+import { allRoutes } from './routes/routes';
+import { adminLogoutAction } from './redux/admin/actions/adminLogoutAction';
+import { Home } from './views/Paneles/PanelesClientes/VistasClientes';
 
 function App() {
-  const [count, setCount] = useState(0)
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const login = useSelector((state) => state.adminLogin.login);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const token = localStorage.getItem('token');
+
+	const routesToRender = allRoutes[login.role] || [];
+
+	useEffect(() => {
+		if (!token) {
+			adminLogoutAction(dispatch, navigate);
+		} else {
+			adminReloginAction(token, dispatch, navigate);
+		}
+	}, []);
+
+	return (
+		<Routes>
+			<Route path="/" element={<Home />} />
+
+			{routesToRender.map(({ path, element, layout: Layout }, i) => (
+				<Route
+					key={i}
+					path={path}
+					element={Layout ? <Layout>{element}</Layout> : element}
+				/>
+			))}
+		</Routes>
+	);
 }
 
-export default App
+export default App;
