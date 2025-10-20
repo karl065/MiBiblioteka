@@ -14,6 +14,7 @@ body {
 #root {
 	flex: 1;
 	min-height: 100%;
+	background: linear-gradient(to bottom right, blue, black, yellowgreen);
 }
 
 /* Media queries para tablets y celulares */
