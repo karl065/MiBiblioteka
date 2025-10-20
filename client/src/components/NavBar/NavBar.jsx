@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { logout } from '../../redux/actions';
 import { GoMoveToStart } from 'react-icons/go';
+import { logout } from '../../redux/shared/actions/logoutAppAction';
 
 const NavBar = () => {
 	const login = useSelector((state) => state.adminLogin.login);
