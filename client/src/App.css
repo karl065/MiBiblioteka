@@ -1,42 +1,38 @@
+/* Estilos base */
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+	flex: 1;
+	min-height: 100%;
+	background-image: url('https://res.cloudinary.com/dpjeltekx/image/upload/v1700513237/asambleas/app/cor033-p0rx9wxdjqomx5p3zagnjmxt8p9rq3u5vkm64ws774_omnhyo.jpg');
+	background-size: cover;
+	background-position: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Media queries para tablets y celulares */
+@media screen and (max-width: 768px) {
+	body {
+		font-size: 14px; /* Tamaño de fuente más pequeño para dispositivos más pequeños */
+	}
+
+	#root {
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+@media screen and (max-width: 480px) {
+	body {
+		font-size: 12px; /* Tamaño de fuente aún más pequeño para dispositivos muy pequeños */
+	}
 }
