@@ -13,12 +13,12 @@ public class EliminarEstadoLibroServices {
         this.estadoLibroRepository = estadoLibroRepository;
     }
 
-    public boolean eliminarRol(String id) {
+    public boolean eliminarEstadoLibro(String id) {
 
         boolean eliminado = estadoLibroRepository.eliminar(id);
 
         if (!eliminado) {
-            System.out.println("No se encontró el rol con id: " + id);
+            System.out.println("No se encontró el estado libro con id: " + id);
             return false;
         }
 
