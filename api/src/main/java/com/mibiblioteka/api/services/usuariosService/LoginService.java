@@ -1,67 +1,74 @@
 package com.mibiblioteka.api.services.usuariosService;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
+import com.mibiblioteka.api.helpers.filtros.FiltroHelper;
 import com.mibiblioteka.api.helpers.jwt.JwtUtils;
 import com.mibiblioteka.api.models.Usuarios;
 import com.mibiblioteka.api.repository.usuariosRepository.UsuariosRepository;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class LoginService {
 
-    @Autowired
-    private UsuariosRepository usuariosRepository;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    
-    @Autowired
-    private JwtUtils jwtUtils;
-            
+    private final UsuariosRepository usuariosRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
+
+    public LoginService(
+            UsuariosRepository usuariosRepository,
+            PasswordEncoder passwordEncoder,
+            JwtUtils jwtUtils
+    ) {
+        this.usuariosRepository = usuariosRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtils = jwtUtils;
+    }
+
+    /**
+     * Valida las credenciales del usuario y genera el token JWT.
+     */
     public String LoginServices(String correo, String password) {
         try {
-            System.out.println("🟢 Intentando login para correo: " + correo);
+            // Construir filtro dinámico
+            Map<String, Object> filtros = Map.of("correo", correo);
 
-            // Buscar usuario por correo
-            Optional<Usuarios> usuarioOpt = usuariosRepository.findByCorreo(correo);
-            System.out.println("📬 Usuario encontrado: " + usuarioOpt.isPresent());
+            Query query = FiltroHelper.construirQuery(filtros, Usuarios.class);
+            List<Usuarios> resultado = usuariosRepository.buscar(query);
 
-            if (usuarioOpt.isEmpty()) {
+            if (resultado.isEmpty()) {
                 System.out.println("❌ No existe un usuario con ese correo.");
                 return null;
             }
 
-            Usuarios usuario = usuarioOpt.get(); 
+            Usuarios usuario = resultado.get(0);
 
-            System.out.println("🔍 Verificando contraseña para usuario: " + usuario.getCorreo() + " y password: " + usuario.getPassword());
-
-            // Verificar contraseña
-            boolean passwordMatch = passwordEncoder.matches(password, usuario.getPassword());
-            System.out.println("🔐 Contraseña coincide: " + passwordMatch);
-
+            // Validar contraseña
+            boolean passwordMatch = passwordEncoder.matches(password.trim(), usuario.getPassword().trim());
             if (!passwordMatch) {
                 System.out.println("❌ Contraseña incorrecta.");
                 return null;
             }
 
-            // Generar token si todo está correcto
-            List<String> roles = usuario.getRol() == null ? List.of() :
-                    usuario.getRol().stream().map(r -> r.getNombre()).toList();
+            // Obtener roles del usuario
+            List<String> roles = usuario.getRol() == null
+                    ? List.of()
+                    : usuario.getRol().stream()
+                            .map(r -> r.getNombre())
+                            .toList();
 
+            // Generar token
             String token = jwtUtils.generateToken(usuario.getCorreo(), roles);
-            System.out.println("✅ Token generado correctamente para: " + usuario.getCorreo());
 
+            System.out.println("✅ Login exitoso para " + usuario.getCorreo());
             return token;
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("⚠️ Error en LoginServices: " + e.getMessage());
+            System.err.println("⚠️ Error en LoginService: " + e.getMessage());
             return null;
         }
     }

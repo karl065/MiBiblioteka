@@ -34,10 +34,10 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login").permitAll() // público
+                .requestMatchers("/auth/login").permitAll() 
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // { changed code }
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) 
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();

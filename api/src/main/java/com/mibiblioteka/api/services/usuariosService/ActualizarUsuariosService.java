@@ -1,6 +1,6 @@
 package com.mibiblioteka.api.services.usuariosService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,23 +9,28 @@ import com.mibiblioteka.api.repository.usuariosRepository.UsuariosRepository;
 
 @Service
 public class ActualizarUsuariosService {
-    @Autowired
+
     private UsuariosRepository usuariosRepository;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuarios actualizarUsuarioService(String id, Usuarios usuario) {
+    public ActualizarUsuariosService(UsuariosRepository usuariosRepository,
+            ObtenerUsuariosService obtenerUsuariosService,
+            PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+        this.usuariosRepository = usuariosRepository;
+    }
+
+    public Optional<Usuarios> actualizarUsuario(String id, Usuarios updates) {
         try {
-            
-            return usuariosRepository.findById(id).map(u -> {
-                u.setNombre(usuario.getNombre());
-                if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
-                    u.setPassword(passwordEncoder.encode(usuario.getPassword()));
-                }
-                u.setRol(usuario.getRol());
-                return usuariosRepository.save(u);
-            }).orElse(null);
+            if (updates.getPassword() != null) {
+                String encodedPassword = passwordEncoder.encode(updates.getPassword());
+                updates.setPassword(encodedPassword);
+                return usuariosRepository.actualizar(id, updates);
+            } else {
+                return usuariosRepository.actualizar(id, updates);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error al actualizar un usuario: " + e.getMessage());

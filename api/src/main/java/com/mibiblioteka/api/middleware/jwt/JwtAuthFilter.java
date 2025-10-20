@@ -58,10 +58,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     // Extraer datos del token
                     String correo = jwtUtils.getCorreoFromToken(token);
                     List<String> roles = jwtUtils.getRolesFromToken(token);
-
+                    System.out.println("✅ Token válido para el usuario: " + correo + " con roles: " + roles);
                     // Crear lista de autoridades
                     List<SimpleGrantedAuthority> authorities = roles.stream()
-                            .map(SimpleGrantedAuthority::new)
+                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                             .collect(Collectors.toList());
 
                     // Crear autenticación
