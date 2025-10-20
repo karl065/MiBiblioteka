@@ -25,6 +25,10 @@ public class Libros {
     @NotBlank(message = "El título es obligatorio")
     private String titulo;
 
+    private String sinopsis;
+
+    private String portadaUrl;
+
     @DBRef
     private Autores autor;
 
@@ -58,6 +62,8 @@ public class Libros {
         return "Libros{" +
                 "id='" + id + '\'' +
                 ", titulo='" + titulo + '\'' +
+                ", sinopsis='" + sinopsis + '\'' +
+                ", portadaUrl='" + portadaUrl + '\'' +
                 ", vecesPrestado='" + vecesPrestado + '\'' +
                 ", autor='" + autor + '\'' +
                 ", estado='" + estado + '\'' +

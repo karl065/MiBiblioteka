@@ -31,9 +31,9 @@ const Sidebar = () => {
 
 	return (
 		<div>
-			<nav className="p-2 bg-black rounded-lg opacity-70">
-				<div className="bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
-					<div className="flex justify-center p-2 border-2 border-black rounded-lg">
+			<nav className="p-2 bg-black rounded-lg opacity-70 h-full">
+				<div className="h-full bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
+					<div className="h-full flex justify-center p-2 border-2 border-black rounded-lg">
 						<div className="p-2">
 							<div className="font-bold text-white">
 								<span>{login.primerNombre}</span>
