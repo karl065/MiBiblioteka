@@ -1,11 +1,15 @@
 package com.mibiblioteka.api.repository.usuariosRepository;
 
 import com.mibiblioteka.api.models.Usuarios;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import java.util.Optional;
+import com.mibiblioteka.api.repository.base.BaseRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UsuariosRepository extends MongoRepository<Usuarios, String> {
+@Repository
+public class UsuariosRepository extends BaseRepository<Usuarios> {
 
-    Optional<Usuarios> findByCorreo(String correo);
-    boolean existsByCorreo(String correo);
+    public UsuariosRepository() {
+        super(Usuarios.class);
+    }
+    
 }
+

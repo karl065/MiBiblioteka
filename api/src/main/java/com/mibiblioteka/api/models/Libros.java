@@ -3,17 +3,23 @@ package com.mibiblioteka.api.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 @Data
 @Document(collection = "libros")
 public class Libros {
-    
-     @Id
+
+    @Id
     private String id;
 
     @NotBlank(message = "El título es obligatorio")
@@ -23,7 +29,7 @@ public class Libros {
     private Autores autor;
 
     @DBRef
-    private Generos genero;
+    private List<Generos> generos = new ArrayList<>();
 
     @DBRef
     private EstadoLibro estado;
@@ -46,4 +52,22 @@ public class Libros {
 
     // Veces que este libro ha sido prestado
     private int vecesPrestado = 0;
+
+    @Override
+    public String toString() {
+        return "Libros{" +
+                "id='" + id + '\'' +
+                ", titulo='" + titulo + '\'' +
+                ", vecesPrestado='" + vecesPrestado + '\'' +
+                ", autor='" + autor + '\'' +
+                ", estado='" + estado + '\'' +
+                ", usuarioPrestamo='" + usuarioPrestamo + '\'' +
+                ", fechaPrestamo='" + fechaPrestamo + '\'' +
+                ", fechaDevolucion='" + fechaDevolucion + '\'' +
+                ", lectoresCount=" + (lectores != null ? lectores.size() : 0) +
+                ", fechasPrestamoCount=" + (fechasPrestamo != null ? fechasPrestamo.size() : 0) +
+                ", fechasDevolucionCount=" + (fechasDevolucion != null ? fechasDevolucion.size() : 0) +
+                ", generosCount=" + (generos != null ? generos.size() : 0) +
+                '}';
+    }
 }
