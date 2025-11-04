@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useSelector } from 'react-redux';
 import Tabla from '../../../../components/Tabla/Tabla';
 import { FcAutomatic } from 'react-icons/fc';

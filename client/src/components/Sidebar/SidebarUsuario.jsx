@@ -69,7 +69,7 @@ const SidebarUsuario = () => {
 								</li>
 								<hr className="hidden my-2" />
 								<li
-									className={`flex w-full hidden ${
+									className={`flex w-full lg:hidden ${
 										location.pathname === '/ActualizarDatos'
 											? 'opacity-60 cursor-not-allowed'
 											: ''
